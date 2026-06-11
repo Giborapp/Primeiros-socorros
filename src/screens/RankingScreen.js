@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import CharacterAvatar from '../components/CharacterAvatar';
 import { getClassRanking, getStudents } from '../services/firestore';
+import { TOTAL_GAME_QUESTIONS } from '../constants/game';
 
 const MEDAL = ['🥇','🥈','🥉'];
 
@@ -75,7 +76,7 @@ export default function RankingScreen() {
                     <CharacterAvatar
                       options={s?.character}
                       size={50}
-                      isFirefighter={(r.correctCount || 0) / (r.totalQuestions || 45) > 0.5}
+                      isFirefighter={(r.correctCount || 0) / (r.totalQuestions || TOTAL_GAME_QUESTIONS) > 0.5}
                     />
                     <div style={{ fontSize:'1.2rem' }}>{MEDAL[i]}</div>
                     <div style={{
@@ -117,12 +118,12 @@ export default function RankingScreen() {
                 <CharacterAvatar
                   options={s?.character}
                   size={44}
-                  isFirefighter={(r.correctCount || 0) / (r.totalQuestions || 45) > 0.5}
+                  isFirefighter={(r.correctCount || 0) / (r.totalQuestions || TOTAL_GAME_QUESTIONS) > 0.5}
                 />
                 <div style={{ flex:1 }}>
                   <div className="rank-name">{r.studentName} {isMe && '(você)'}</div>
                   <div style={{ fontSize:'0.75rem', color:'rgba(255,255,255,0.4)' }}>
-                    {r.correctCount || 0}/45 acertos
+                    {r.correctCount || 0}/{r.totalQuestions || TOTAL_GAME_QUESTIONS} acertos
                   </div>
                 </div>
                 <div className="rank-score">⭐ {r.score}</div>

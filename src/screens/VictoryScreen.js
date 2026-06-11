@@ -4,6 +4,7 @@ import { useApp } from '../context/AppContext';
 import FullBodyCharacter from '../components/FullBodyCharacter';
 import { createAttemptId, saveGameResult, updateStudentProgress } from '../services/firestore';
 import { playSound } from '../utils/sound';
+import { QUESTIONS_PER_TOPIC } from '../constants/game';
 
 function Confetti() {
   const colors = ['#fd79a8', '#fdcb6e', '#a29bfe', '#00cec9', '#55efc4'];
@@ -31,7 +32,7 @@ export default function VictoryScreen() {
   const savePromiseRef = useRef(null);
   const [startingAgain, setStartingAgain] = useState(false);
   const correctCount = completedTopics.reduce((sum, topic) => sum + (topic.correctCount || 0), 0);
-  const totalQuestions = completedTopics.length * 5;
+  const totalQuestions = completedTopics.length * QUESTIONS_PER_TOPIC;
   const accuracy = totalQuestions ? Math.round((correctCount / totalQuestions) * 100) : 0;
   const becameFirefighter = accuracy > 50;
 

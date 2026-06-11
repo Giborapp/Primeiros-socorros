@@ -1,7 +1,7 @@
 {
   "firestore": {
-    "database": "default",
-    "location": "southamerica-east1",
+    "database": "(default)",
+    "location": "nam5",
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
@@ -21,7 +21,7 @@
       "emailPassword": true,
       "googleSignIn": {
         "oAuthBrandDisplayName": "Primeiros-socorros",
-        "supportEmail": "support@undefined.firebaseapp.com"
+        "supportEmail": "equipegibor@gmail.com"
       }
     }
   }

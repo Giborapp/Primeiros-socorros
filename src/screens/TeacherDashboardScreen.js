@@ -5,8 +5,7 @@ import { getAllStudentsBySchool, getResultsBySchool } from '../services/firestor
 import { logout } from '../services/auth';
 import { topics } from '../data/questions';
 import CharacterAvatar from '../components/CharacterAvatar';
-
-const QUESTIONS_PER_TOPIC = 5;
+import { QUESTIONS_PER_TOPIC, TOTAL_GAME_QUESTIONS } from '../constants/game';
 
 function StatCard({ emoji, label, value, sub, color = '#a29bfe' }) {
   return (
@@ -369,7 +368,7 @@ export default function TeacherDashboardScreen() {
                   const bestScore = attempts.length ? Math.max(...attempts.map(item => item.score || 0)) : 0;
                   const avgAccuracy = attempts.length
                     ? Math.round(attempts.reduce((sum, item) => (
-                      sum + (item.accuracy ?? Math.round(((item.correctCount || 0) / (item.totalQuestions || 45)) * 100))
+                      sum + (item.accuracy ?? Math.round(((item.correctCount || 0) / (item.totalQuestions || TOTAL_GAME_QUESTIONS)) * 100))
                     ), 0) / attempts.length)
                     : 0;
                   const topicAttempts = attempts.flatMap(item => item.completedTopics || []);
@@ -429,7 +428,7 @@ export default function TeacherDashboardScreen() {
                                     ? attempt.completedAt.toDate().toLocaleDateString('pt-BR')
                                     : `Tentativa ${attempts.length - index}`}
                                 </span>
-                                <b>{attempt.accuracy ?? Math.round(((attempt.correctCount || 0) / (attempt.totalQuestions || 45)) * 100)}%</b>
+                                <b>{attempt.accuracy ?? Math.round(((attempt.correctCount || 0) / (attempt.totalQuestions || TOTAL_GAME_QUESTIONS)) * 100)}%</b>
                                 <strong>⭐ {attempt.score || 0}</strong>
                               </div>
                             ))}

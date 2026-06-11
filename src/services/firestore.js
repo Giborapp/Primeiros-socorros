@@ -3,6 +3,7 @@ import {
   query, where, serverTimestamp,
 } from 'firebase/firestore';
 import { db } from '../firebase';
+import { TOTAL_GAME_QUESTIONS } from '../constants/game';
 
 const legacyMigrationPromises = new Map();
 
@@ -112,7 +113,7 @@ export async function getAllStudentsBySchool(schoolId) {
 // Results and ranking
 export async function saveGameResult({
   studentId, studentName, schoolId, className, score, correctCount,
-  totalQuestions = 45, completedTopics = [], attemptId,
+  totalQuestions = TOTAL_GAME_QUESTIONS, completedTopics = [], attemptId,
 }) {
   const data = {
     studentId, studentName, schoolId, class: className,

@@ -1,0 +1,3 @@
+export const QUESTIONS_PER_TOPIC = 3;
+export const TOTAL_TOPICS = 9;
+export const TOTAL_GAME_QUESTIONS = QUESTIONS_PER_TOPIC * TOTAL_TOPICS;

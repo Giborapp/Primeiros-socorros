@@ -6,8 +6,8 @@ import { updateStudentProgress } from '../services/firestore';
 import { topics } from '../data/questions';
 import { playSound } from '../utils/sound';
 import FullBodyCharacter from '../components/FullBodyCharacter';
+import { QUESTIONS_PER_TOPIC } from '../constants/game';
 
-const QUESTIONS_PER_TOPIC = 5;
 const OPTION_COLORS = ['#FF6B6B','#4ECDC4','#FFE66D','#A8E6CF'];
 const OPTION_TEXT   = ['#7B0000','#004D47','#5C4400','#1B4D35'];
 function shuffle(arr) {
@@ -108,7 +108,7 @@ export default function QuestionScreen() {
 
   /* ── Topic complete screen ── */
   if (topicDone) {
-    const stars = correct >= 5 ? 3 : correct >= 3 ? 2 : 1;
+    const stars = correct === 3 ? 3 : correct === 2 ? 2 : 1;
     return (
       <div style={{
         minHeight:'100vh', display:'flex', flexDirection:'column',
