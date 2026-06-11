@@ -58,18 +58,51 @@ export default function StudentLoginScreen() {
   async function handleFirstTime(e) {
     e.preventDefault();
     setError('');
-    if (!newName.trim()) { setError('Digite seu nome.'); return; }
-    const exists = await findStudent(schoolData.id, selectedClass, newName.trim());
-    if (exists) { setError('Já existe um aluno com esse nome nessa turma. Escolha seu nome na lista.'); return; }
+
+    if (!newName.trim()) {
+      setError('Digite seu nome.');
+      return;
+    }
+    if (!schoolData?.id || !selectedClass) {
+      setError('Não foi possível identificar a escola ou a turma. Volte e tente novamente.');
+      return;
+    }
+
     setLoading(true);
     try {
-      const created = await createStudent(schoolData.id, { name: newName.trim(), className: selectedClass });
-      const student = { id: created.id, currentAttemptId: created.currentAttemptId, name: newName.trim(), class: selectedClass, schoolId: schoolData.id, character: null, completedTopics: [], totalScore: 0 };
+      const exists = await findStudent(schoolData.id, selectedClass, newName.trim());
+      if (exists) {
+        setError('Já existe um aluno com esse nome nessa turma. Escolha seu nome na lista.');
+        return;
+      }
+
+      const created = await createStudent(schoolData.id, {
+        name: newName.trim(),
+        className: selectedClass,
+      });
+      const student = {
+        id: created.id,
+        currentAttemptId: created.currentAttemptId,
+        name: newName.trim(),
+        class: selectedClass,
+        schoolId: schoolData.id,
+        character: null,
+        completedTopics: [],
+        totalScore: 0,
+      };
       resetGame();
       setStudentData(student);
       nav('/character');
-    } catch { setError('Erro ao criar perfil. Tente novamente.'); }
-    setLoading(false);
+    } catch (err) {
+      console.error('Erro ao criar perfil do aluno:', err);
+      if (err?.code === 'permission-denied') {
+        setError('O Firebase bloqueou a criação. As regras do banco precisam ser publicadas.');
+      } else {
+        setError('Erro ao criar perfil. Verifique sua conexão e tente novamente.');
+      }
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
