@@ -1,0 +1,40 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function ownsSchool(schoolId) {
+      return request.auth != null && request.auth.uid == schoolId;
+    }
+
+    // User profile: only the authenticated owner.
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // School and students: exclusive access for the school account.
+    match /schools/{schoolId} {
+      allow read, write: if ownsSchool(schoolId);
+
+      match /students/{studentId} {
+        allow read, write: if ownsSchool(schoolId);
+      }
+    }
+
+    // Temporary read-only access used to migrate the old root collection.
+    match /students/{studentId} {
+      allow read: if request.auth != null
+                  && resource.data.schoolId == request.auth.uid;
+      allow write: if false;
+    }
+
+    // Results are isolated by school as well.
+    match /results/{resultId} {
+      allow read: if request.auth != null
+                  && resource.data.schoolId == request.auth.uid;
+      allow create: if request.auth != null
+                    && request.resource.data.schoolId == request.auth.uid;
+      allow update, delete: if request.auth != null
+                            && resource.data.schoolId == request.auth.uid;
+    }
+  }
+}
