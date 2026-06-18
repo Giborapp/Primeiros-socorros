@@ -3,10 +3,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '../context/AppContext';
 import { updateStudentProgress } from '../services/firestore';
-import { topics } from '../data/questions';
+import { topics, getTopicQuestions } from '../data/questions';
 import { playSound } from '../utils/sound';
 import FullBodyCharacter from '../components/FullBodyCharacter';
-import { QUESTIONS_PER_TOPIC } from '../constants/game';
+import { DIFFICULTY_META, QUESTIONS_PER_TOPIC } from '../constants/game';
 
 const OPTION_COLORS = ['#FF6B6B','#4ECDC4','#FFE66D','#A8E6CF'];
 const OPTION_TEXT   = ['#7B0000','#004D47','#5C4400','#1B4D35'];
@@ -41,11 +41,11 @@ export default function QuestionScreen() {
   const nav = useNavigate();
   const { topicIdx: topicIdxStr } = useParams();
   const topicIdx = parseInt(topicIdxStr, 10);
-  const { studentData, addCompletedTopic } = useApp();
+  const { studentData, addCompletedTopic, difficulty, timedMode } = useApp();
 
   const topic = topics[topicIdx];
 
-  const [questions]  = useState(() => shuffle(topic.questions).slice(0, QUESTIONS_PER_TOPIC));
+  const [questions]  = useState(() => shuffle(getTopicQuestions(topicIdx, difficulty)).slice(0, QUESTIONS_PER_TOPIC));
   const [current, setCurrent]     = useState(0);
   const [options, setOptions]     = useState(() => shuffle(questions[0].options));
   const [selected, setSelected]   = useState(null);
@@ -56,8 +56,23 @@ export default function QuestionScreen() {
   const [expression, setExpression] = useState('thinking');
   const [showConfetti, setShowConfetti] = useState(false);
   const [topicDone, setTopicDone] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(30);
 
   const q = questions[current];
+
+  useEffect(() => {
+    if (difficulty !== 'hard' || !timedMode || answered || topicDone) return undefined;
+    if (timeLeft <= 0) {
+      playSound('wrong');
+      setSelected('__time__');
+      setAnswered(true);
+      setWrongIds(ids => [...ids, q.id]);
+      setExpression('sad');
+      return undefined;
+    }
+    const timer = setTimeout(() => setTimeLeft(value => value - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [answered, difficulty, q.id, timeLeft, timedMode, topicDone]);
 
   function handleAnswer(opt) {
     if (answered) return;
@@ -87,6 +102,7 @@ export default function QuestionScreen() {
       setSelected(null);
       setAnswered(false);
       setExpression('thinking');
+      setTimeLeft(30);
     } else {
       setTopicDone(true);
     }
@@ -101,7 +117,9 @@ export default function QuestionScreen() {
         studentData.schoolId,
         studentData.id,
         updatedTopics,
-        newTotal
+        newTotal,
+        undefined,
+        difficulty
       ).catch(() => {});
     }
   }, [topicDone]); // eslint-disable-line
@@ -195,10 +213,10 @@ export default function QuestionScreen() {
           <div style={{ flex:1 }}>
             <div style={{ display:'flex', justifyContent:'space-between', marginBottom:5 }}>
               <span style={{ fontSize:'0.82rem', fontWeight:800, color:topic.color }}>
-                {topic.emoji} {topic.name}
+                {topic.emoji} {topic.name} · {DIFFICULTY_META[difficulty].label}
               </span>
               <span style={{ fontSize:'0.82rem', color:'rgba(255,255,255,0.5)' }}>
-                {current+1}/{QUESTIONS_PER_TOPIC}
+                {difficulty === 'hard' && timedMode ? `⏱️ ${timeLeft}s · ` : ''}{current+1}/{QUESTIONS_PER_TOPIC}
               </span>
             </div>
             <div className="q-progress-bar">

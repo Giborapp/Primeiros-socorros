@@ -12,6 +12,8 @@ export function AppProvider({ children }) {
   // Progresso do jogo atual
   const [completedTopics, setCompletedTopics] = useState([]); // [{topicIndex, score, correctCount, wrongIds}]
   const [totalScore, setTotalScore] = useState(0);
+  const [difficulty, setDifficulty] = useState('easy');
+  const [timedMode, setTimedMode] = useState(false);
   const [isTeacher, setIsTeacher] = useState(false);
 
   useEffect(() => {
@@ -29,6 +31,7 @@ export function AppProvider({ children }) {
         setStudentData(null);
         setCompletedTopics([]);
         setTotalScore(0);
+        setDifficulty('easy');
       }
     });
     return unsub;
@@ -59,6 +62,8 @@ export function AppProvider({ children }) {
       studentData, setStudentData,
       completedTopics, totalScore,
       addCompletedTopic, resetGame, loadGame,
+      difficulty, setDifficulty,
+      timedMode, setTimedMode,
       isTeacher, setIsTeacher,
     }}>
       {children}

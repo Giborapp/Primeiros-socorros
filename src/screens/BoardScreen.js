@@ -5,6 +5,7 @@ import { useApp } from '../context/AppContext';
 import CharacterAvatar from '../components/CharacterAvatar';
 import { topics } from '../data/questions';
 import { playSound } from '../utils/sound';
+import { DIFFICULTY_META } from '../constants/game';
 
 const SCENES = [
   { className: 'kitchen', icon: '🍳', props: ['🔥', '🥘', '🔪'], place: 'Cozinha' },
@@ -58,7 +59,7 @@ function SceneCard({ topic, index, state, score, onClick }) {
 
 export default function BoardScreen() {
   const nav = useNavigate();
-  const { studentData, completedTopics, totalScore } = useApp();
+  const { studentData, completedTopics, totalScore, difficulty } = useApp();
   if (!studentData) return <Navigate to="/student/login" replace />;
 
   const doneSet = new Set(completedTopics.map(item => item.topicIndex));
@@ -92,7 +93,7 @@ export default function BoardScreen() {
 
       <section className="map-intro web-container">
         <div>
-          <span>MAPA DA AVENTURA</span>
+          <span>{DIFFICULTY_META[difficulty].emoji} NÍVEL {DIFFICULTY_META[difficulty].label.toUpperCase()}</span>
           <h1>Explore os lugares e aprenda a ficar seguro</h1>
           <p>Cada fase acontece em um ambiente diferente. Complete uma missão para abrir a próxima.</p>
         </div>

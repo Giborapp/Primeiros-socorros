@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { getAllStudentsBySchool, getResultsBySchool } from '../services/firestore';
 import { logout } from '../services/auth';
-import { topics } from '../data/questions';
+import { findQuestionById, topics } from '../data/questions';
 import CharacterAvatar from '../components/CharacterAvatar';
 import { QUESTIONS_PER_TOPIC, TOTAL_GAME_QUESTIONS } from '../constants/game';
 
@@ -105,7 +105,7 @@ export default function TeacherDashboardScreen() {
       .sort((a, b) => b[1] - a[1])
       .slice(0, 3)
       .map(([qid, count]) => {
-        const q = t.questions.find(q => q.id === Number(qid));
+        const q = findQuestionById(idx, qid);
         return q ? { text: q.text, count } : null;
       })
       .filter(Boolean);
@@ -116,6 +116,12 @@ export default function TeacherDashboardScreen() {
   const topicsRanked = [...topicStats].sort((a, b) => a.pctCorrect - b.pctCorrect);
 
   // ── Ranking geral ─────────────────────────────────────────────────────────
+  const attemptsByStudent = results.reduce((map, result) => {
+    if (!map[result.studentId]) map[result.studentId] = [];
+    map[result.studentId].push(result);
+    return map;
+  }, {});
+
   const globalRanking = [...students]
     .map(student => {
       const attempts = attemptsByStudent[student.id] || [];
@@ -130,12 +136,6 @@ export default function TeacherDashboardScreen() {
     .slice(0, 10);
 
   const classStudents = byClass[selectedClass] || [];
-  const attemptsByStudent = results.reduce((map, result) => {
-    if (!map[result.studentId]) map[result.studentId] = [];
-    map[result.studentId].push(result);
-    return map;
-  }, {});
-
   const TABS = [
     { id: 'geral',  label: '📊 Geral' },
     { id: 'turmas', label: '🏫 Turmas' },

@@ -1,3 +1,6 @@
+import { additionalQuestions } from './additionalQuestions';
+import { mediumQuestions, hardQuestions } from './difficultyQuestions';
+
 function makeQuestions(rows) {
   return rows.map(([text, correctAnswer, ...incorrectAnswers], index) => ({
     id: index + 1,
@@ -16,6 +19,7 @@ export const topics = [
     darkColor: '#c0392b',
     description: 'Aprenda a reconhecer perigos e a pedir ajuda na cozinha.',
     questions: makeQuestions([
+      ...additionalQuestions.kitchen,
       ['Você quer preparar algo no fogão. O que deve fazer?', 'Pedir ajuda e ficar com um adulto', 'Ligar o fogo bem baixinho sozinho', 'Subir em uma cadeira para alcançar', 'Usar o fogão sem contar a ninguém'],
       ['Como os cabos das panelas devem ficar no fogão?', 'Virados para dentro', 'Virados para a passagem', 'Pendurados para fora', 'Apoiados sobre outro queimador'],
       ['Você percebeu fumaça ou cheiro de queimado. O que faz primeiro?', 'Afastar-se e avisar um adulto', 'Procurar sozinho de onde vem', 'Abrir o forno para olhar', 'Jogar água em qualquer lugar'],
@@ -51,6 +55,7 @@ export const topics = [
     darkColor: '#1a9e94',
     description: 'Descubra como evitar quedas, queimaduras e intoxicações.',
     questions: makeQuestions([
+      ...additionalQuestions.bathroom,
       ['O chão do banheiro está molhado. Como você deve andar?', 'Devagar e com atenção', 'Correndo para passar logo', 'Pulando sobre as poças', 'Deslizando de propósito'],
       ['O piso do box está molhado. O que ajuda a evitar escorregões?', 'Usar um tapete antiderrapante bem colocado', 'Deixar sabonete no chão', 'Espalhar uma toalha enrolada', 'Colocar brinquedos na passagem'],
       ['Você viu uma poça no caminho. O que deve fazer?', 'Avisar um adulto e contornar a poça', 'Correr por cima dela', 'Empurrar outra pessoa para testar', 'Cobrir a poça com papel'],
@@ -86,6 +91,7 @@ export const topics = [
     darkColor: '#f39c12',
     description: 'Aprenda a ficar longe de choques e fios perigosos.',
     questions: makeQuestions([
+      ...additionalQuestions.electricity,
       ['O que nunca deve ser colocado em uma tomada?', 'Dedos ou objetos', 'Um protetor instalado por adulto', 'O plugue correto do aparelho', 'Uma tampa própria para tomada'],
       ['Você viu um fio descascado. O que faz?', 'Não tocar e avisar um adulto', 'Cobrir com fita sozinho', 'Puxar o fio da tomada', 'Testar se ainda funciona'],
       ['Uma pessoa está levando um choque. O que a criança deve fazer?', 'Não tocar nela e chamar ajuda imediatamente', 'Puxar a pessoa pela mão', 'Jogar água', 'Abraçar a pessoa'],
@@ -121,6 +127,7 @@ export const topics = [
     darkColor: '#27ae60',
     description: 'Veja como deixar os espaços da casa organizados e seguros.',
     questions: makeQuestions([
+      ...additionalQuestions.home,
       ['Um brinquedo está no alto da estante. O que fazer?', 'Pedir ajuda a um adulto', 'Subir pela estante', 'Abrir as gavetas para escalar', 'Puxar o móvel para perto'],
       ['Como móveis altos ficam mais seguros?', 'Presos corretamente à parede por um adulto', 'Apoiados sobre caixas', 'Com as gavetas abertas', 'Encostados em uma cortina'],
       ['Você quer alcançar algo no alto. O que faz?', 'Pedir ajuda a um adulto', 'Subir nas gavetas', 'Escalar a estante', 'Empilhar cadeiras'],
@@ -156,6 +163,7 @@ export const topics = [
     darkColor: '#2980b9',
     description: 'Aprenda regras importantes para brincar perto da água.',
     questions: makeQuestions([
+      ...additionalQuestions.pool,
       ['Quando uma criança pode entrar na piscina?', 'Quando um adulto responsável estiver supervisionando', 'Quando souber nadar um pouco', 'Quando estiver usando óculos de natação', 'Quando houver outras crianças por perto'],
       ['Como você deve andar na borda molhada da piscina?', 'Devagar e longe da beirada', 'Correndo para não escorregar', 'Pulando de um lado para o outro', 'Empurrando quem está na frente'],
       ['Você viu alguém com dificuldade na água. O que faz primeiro?', 'Chamar um adulto e o socorro imediatamente', 'Pular na água sozinho', 'Esperar para ter certeza', 'Correr para buscar um brinquedo'],
@@ -191,6 +199,7 @@ export const topics = [
     darkColor: '#6c5ce7',
     description: 'Treine como pedir socorro com calma e clareza.',
     questions: makeQuestions([
+      ...additionalQuestions.help,
       ['Qual número chama o SAMU em uma emergência médica?', '192', '190', '193', '191'],
       ['Qual número chama o Corpo de Bombeiros?', '193', '192', '190', '188'],
       ['Qual número chama a Polícia Militar?', '190', '192', '193', '199'],
@@ -226,6 +235,7 @@ export const topics = [
     darkColor: '#e84393',
     description: 'Saiba como pedir ajuda e cuidar de pequenos machucados.',
     questions: makeQuestions([
+      ...additionalQuestions.injuries,
       ['Você fez um corte pequeno. Qual é o primeiro passo?', 'Avisar um adulto e lavar as mãos', 'Esconder o machucado', 'Passar terra', 'Colocar a mão suja sobre o corte'],
       ['Como um corte pequeno pode ser limpo?', 'Com água corrente e sabonete, com ajuda de um adulto', 'Com produto de limpeza', 'Com perfume', 'Com areia'],
       ['Um corte pequeno está sangrando. O que um adulto pode fazer para ajudar?', 'Pressionar suavemente com gaze ou pano limpo', 'Assoprar o corte', 'Esfregar o local', 'Apertar com um objeto sujo'],
@@ -261,6 +271,7 @@ export const topics = [
     darkColor: '#00b894',
     description: 'Aprenda a evitar acidentes com cobras, aranhas e escorpiões.',
     questions: makeQuestions([
+      ...additionalQuestions.animals,
       ['Você viu um escorpião. O que deve fazer?', 'Afastar-se e chamar um adulto', 'Tentar pegar com um pote', 'Encostar para ver se está vivo', 'Empurrar com o pé'],
       ['Você vai mexer em entulhos, frestas ou calçados guardados. O que fazer antes?', 'Pedir que um adulto verifique com proteção', 'Colocar a mão sem olhar', 'Andar descalço pelo local', 'Sacudir tudo perto do rosto'],
       ['Você vai calçar um sapato que estava guardado. O que fazer antes?', 'Pedir a um adulto para verificar e sacudir', 'Colocar o pé rapidamente', 'Molhar o sapato', 'Bater o sapato na própria mão'],
@@ -296,6 +307,7 @@ export const topics = [
     darkColor: '#d63031',
     description: 'Reconheça emergências e saiba quando chamar ajuda.',
     questions: makeQuestions([
+      ...additionalQuestions.emergencies,
       ['Antes de se aproximar de alguém ferido, o que observar?', 'Se o local é seguro', 'Se há brinquedos por perto', 'Se a pessoa está bem vestida', 'Se alguém está filmando'],
       ['Uma pessoa caiu e não responde quando é chamada. O que fazer?', 'Chamar um adulto e ligar 192', 'Dar água', 'Sacudir com força', 'Colocar comida na boca'],
       ['Uma pessoa está com muita dificuldade para respirar. O que fazer?', 'Chamar um adulto e ligar 192', 'Esperar para ver se passa', 'Dar comida', 'Mandar a pessoa correr'],
@@ -344,3 +356,18 @@ export const topics = [
     ]),
   },
 ];
+
+export function getTopicQuestions(topicIndex, difficulty = 'easy') {
+  if (difficulty === 'medium') return mediumQuestions[topicIndex] || [];
+  if (difficulty === 'hard') return hardQuestions[topicIndex] || [];
+  return topics[topicIndex]?.questions || [];
+}
+
+export function findQuestionById(topicIndex, questionId) {
+  const banks = ['easy', 'medium', 'hard'];
+  for (const bank of banks) {
+    const found = getTopicQuestions(topicIndex, bank).find(question => String(question.id) === String(questionId));
+    if (found) return found;
+  }
+  return null;
+}

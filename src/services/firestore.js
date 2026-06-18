@@ -67,6 +67,7 @@ export async function createStudent(schoolId, { name, className }) {
   const ref = await addDoc(studentsCollection(schoolId), {
     name, class: className, schoolId,
     character: null, completedTopics: [], totalScore: 0,
+    currentDifficulty: 'easy', unlockedDifficulty: 'easy',
     currentAttemptId,
     createdAt: serverTimestamp(),
   });
@@ -97,10 +98,14 @@ export async function updateStudentProgress(
   studentId,
   completedTopics,
   totalScore,
-  currentAttemptId
+  currentAttemptId,
+  difficulty,
+  unlockedDifficulty
 ) {
   const data = { completedTopics, totalScore };
   if (currentAttemptId) data.currentAttemptId = currentAttemptId;
+  if (difficulty) data.currentDifficulty = difficulty;
+  if (unlockedDifficulty) data.unlockedDifficulty = unlockedDifficulty;
   await updateDoc(studentDocument(schoolId, studentId), data);
 }
 
@@ -113,13 +118,13 @@ export async function getAllStudentsBySchool(schoolId) {
 // Results and ranking
 export async function saveGameResult({
   studentId, studentName, schoolId, className, score, correctCount,
-  totalQuestions = TOTAL_GAME_QUESTIONS, completedTopics = [], attemptId,
+  totalQuestions = TOTAL_GAME_QUESTIONS, completedTopics = [], attemptId, difficulty = 'easy',
 }) {
   const data = {
     studentId, studentName, schoolId, class: className,
     score, correctCount, totalQuestions,
     accuracy: totalQuestions ? Math.round((correctCount / totalQuestions) * 100) : 0,
-    completedTopics, attemptId: attemptId || null,
+    completedTopics, attemptId: attemptId || null, difficulty,
     completedAt: serverTimestamp(),
   };
   if (attemptId) {

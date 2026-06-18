@@ -7,7 +7,7 @@ import CharacterAvatar from '../components/CharacterAvatar';
 
 export default function StudentLoginScreen() {
   const nav = useNavigate();
-  const { schoolData, setStudentData, resetGame, loadGame } = useApp();
+  const { schoolData, setStudentData, resetGame, loadGame, setDifficulty } = useApp();
 
   const [step, setStep]           = useState('class');   // 'class' | 'name'
   const [selectedClass, setClass] = useState('');
@@ -51,6 +51,7 @@ export default function StudentLoginScreen() {
       resetGame();
     }
     setStudentData(selectedStudent);
+    setDifficulty(student.currentDifficulty || 'easy');
     if (!student.character) nav('/character');
     else nav('/student/home');
   }
@@ -89,9 +90,12 @@ export default function StudentLoginScreen() {
         character: null,
         completedTopics: [],
         totalScore: 0,
+        currentDifficulty: 'easy',
+        unlockedDifficulty: 'easy',
       };
       resetGame();
       setStudentData(student);
+      setDifficulty('easy');
       nav('/character');
     } catch (err) {
       console.error('Erro ao criar perfil do aluno:', err);

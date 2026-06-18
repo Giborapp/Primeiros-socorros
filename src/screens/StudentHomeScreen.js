@@ -4,10 +4,15 @@ import { motion } from 'framer-motion';
 import { useApp } from '../context/AppContext';
 import FullBodyCharacter from '../components/FullBodyCharacter';
 import { playSound } from '../utils/sound';
+import { DIFFICULTY_META, DIFFICULTY_ORDER } from '../constants/game';
+import { createAttemptId, updateStudentProgress } from '../services/firestore';
 
 export default function StudentHomeScreen() {
   const nav = useNavigate();
-  const { studentData, completedTopics, totalScore } = useApp();
+  const {
+    studentData, setStudentData, completedTopics, totalScore, resetGame,
+    difficulty, setDifficulty, timedMode, setTimedMode,
+  } = useApp();
 
   if (!studentData) return <Navigate to="/student/login" replace />;
   if (!studentData.character) return <Navigate to="/character" replace />;
@@ -19,6 +24,22 @@ export default function StudentHomeScreen() {
   function go(path) {
     playSound('click');
     nav(path);
+  }
+
+  async function chooseDifficulty(nextDifficulty) {
+    if (nextDifficulty === difficulty) return;
+    const nextAttemptId = createAttemptId();
+    resetGame();
+    setDifficulty(nextDifficulty);
+    setStudentData(current => ({
+      ...current, completedTopics: [], totalScore: 0,
+      currentAttemptId: nextAttemptId, currentDifficulty: nextDifficulty,
+      unlockedDifficulty: 'hard',
+    }));
+    await updateStudentProgress(
+      studentData.schoolId, studentData.id, [], 0, nextAttemptId, nextDifficulty, 'hard'
+    ).catch(() => {});
+    playSound('click');
   }
 
   return (
@@ -44,11 +65,27 @@ export default function StudentHomeScreen() {
           animate={{ opacity: 1, y: 0 }}
         >
           <div className="student-hero-copy">
+            <div style={{ display:'flex', flexWrap:'wrap', gap:8, marginBottom:12 }}>
+              {DIFFICULTY_ORDER.map(level => <button key={level} type="button"
+                onClick={() => chooseDifficulty(level)} style={{
+                  padding:'8px 12px', borderRadius:999, cursor:'pointer', fontWeight:800,
+                  color:'#fff', border: level === difficulty ? '2px solid #fdcb6e' : '1px solid rgba(255,255,255,.25)',
+                  background: level === difficulty ? 'rgba(253,203,110,.24)' : 'rgba(255,255,255,.1)',
+                }}>
+                {DIFFICULTY_META[level].emoji} {DIFFICULTY_META[level].label}
+              </button>)}
+            </div>
+            {difficulty === 'hard' && <button type="button" onClick={() => setTimedMode(value => !value)}
+              style={{ display:'block', marginBottom:14, padding:'8px 12px', borderRadius:12,
+                border:'1px solid rgba(255,255,255,.25)', background:'rgba(0,0,0,.16)',
+                color:'#fff', cursor:'pointer', fontWeight:700 }}>
+              ⏱️ Tempo por pergunta: {timedMode ? '30 segundos' : 'desligado'}
+            </button>}
             <span className="student-kicker">{completed === 9 ? 'JORNADA COMPLETA' : 'SUA PRÓXIMA MISSÃO'}</span>
             <h2>{completed === 9 ? 'Você completou todos os desafios!' : 'Jornada dos Primeiros Socorros'}</h2>
             <p>
               {completed === 0
-                ? 'Explore nove lugares, responda às perguntas e aprenda como agir com segurança.'
+                ? `${DIFFICULTY_META[difficulty].description} Complete os nove lugares no seu ritmo.`
                 : completed === 9
                   ? 'Veja seu resultado ou jogue novamente para melhorar sua pontuação.'
                   : `Você já concluiu ${completed} de 9 fases. Continue assim!`}

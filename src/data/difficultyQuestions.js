@@ -1,0 +1,161 @@
+function makeQuestions(rows, prefix) {
+  return rows.map(([text, correctAnswer, ...incorrectAnswers], index) => ({
+    id: `${prefix}-${index + 1}`,
+    text,
+    options: [correctAnswer, ...incorrectAnswers],
+    correctAnswer,
+  }));
+}
+
+const mediumRows = [
+  [
+    ['Você está na cozinha e vê uma panela com o cabo para fora e uma criança passando perto. O que fazer?', 'Afastar-se e avisar um adulto imediatamente.', 'Virar o cabo com a mão.', 'Puxar a criança e a panela ao mesmo tempo.', 'Continuar brincando.'],
+    ['Há cheiro de gás na cozinha. Qual é a atitude mais segura?', 'Sair do local sem acender luzes e chamar um adulto.', 'Acender a luz para procurar o vazamento.', 'Testar o fogão com um fósforo.', 'Ligar um ventilador na tomada.'],
+    ['Óleo quente começou a soltar muita fumaça. O que a criança deve fazer?', 'Manter distância e chamar um adulto.', 'Jogar água para esfriar.', 'Levar a panela até a pia.', 'Assoprar de perto.'],
+    ['Você encontra fósforos ao lado do fogão e uma panela quente com o cabo para fora. Como agir?', 'Não tocar em nada, afastar-se e avisar um adulto.', 'Guardar os fósforos e virar o cabo.', 'Levar a panela até a pia.', 'Apagar o fogo com água.'],
+    ['Um copo quebrou perto de um líquido derramado no chão. Qual é a melhor decisão?', 'Isolar o local e chamar um adulto para limpar.', 'Catar primeiro os pedaços maiores.', 'Cobrir tudo com um pano.', 'Pular sobre o local.'],
+    ['Por que subir em gavetas para alcançar um armário perto do fogão é especialmente perigoso?', 'Há risco de queda e contato com objetos quentes.', 'Porque as gavetas podem ficar abertas.', 'Porque o objeto pode estar empoeirado.', 'Porque demora mais que pedir ajuda.'],
+  ],
+  [
+    ['O piso está molhado e há um secador ligado perto da pia. O que fazer primeiro?', 'Não tocar em nada, sair com cuidado e avisar um adulto.', 'Desligar o secador com a mão molhada.', 'Secar o piso ao redor do fio.', 'Puxar o aparelho pelo cabo.'],
+    ['Uma criança tomou um remédio sem saber a dose. Qual é a melhor atitude?', 'Avisar um adulto imediatamente e mostrar a embalagem.', 'Esperar para ver se passa mal.', 'Tomar água e esconder o frasco.', 'Dar o mesmo remédio a outra pessoa.'],
+    ['Durante o banho você sente tontura. Como agir?', 'Sentar-se com cuidado, desligar o chuveiro se for seguro e chamar ajuda.', 'Aumentar a água quente.', 'Sair correndo com o piso molhado.', 'Continuar o banho.'],
+    ['Há remédios no chão e água derramada perto deles. O que deve ser feito?', 'Manter distância e avisar um adulto sobre os dois riscos.', 'Guardar os remédios antes de secar.', 'Secar o chão e deixar os remédios.', 'Experimentar o remédio para identificá-lo.'],
+    ['O tapete antiderrapante saiu do lugar e o piso está molhado. Qual ação é mais segura?', 'Não passar pelo local até um adulto organizar e secar.', 'Pisar somente nas bordas.', 'Colocar uma toalha solta por cima.', 'Correr para diminuir o tempo no piso.'],
+    ['Por que um aparelho elétrico desligado ainda não deve ficar na borda de uma pia molhada?', 'Ele pode cair na água e voltar a ser ligado sem segurança.', 'Ele ocupa espaço na pia.', 'A água pode mudar sua cor.', 'O fio pode ficar curto demais.'],
+  ],
+  [
+    ['Um aparelho caiu em uma poça e continua ligado. O que fazer?', 'Não tocar na água e chamar um adulto para desligar a energia.', 'Retirar o aparelho rapidamente.', 'Secar a poça com uma toalha.', 'Empurrar o aparelho com o pé.'],
+    ['Você vê uma tomada com faíscas e cheiro de queimado. Qual é a prioridade?', 'Afastar as pessoas e chamar um adulto.', 'Cobrir a tomada com papel.', 'Jogar água.', 'Retirar o plugue puxando o fio.'],
+    ['Uma pessoa está recebendo um choque. Por que você não deve tocá-la?', 'A corrente elétrica pode passar para você.', 'Porque a pessoa pode cair.', 'Porque o fio pode quebrar.', 'Porque a luz pode apagar.'],
+    ['Você percebe um fio descascado atrás da televisão e precisa pegar um brinquedo próximo. O que fazer?', 'Não buscar o brinquedo e avisar um adulto.', 'Retirar o brinquedo sem encostar no fio.', 'Cobrir o fio com uma almofada.', 'Puxar a televisão para frente.'],
+    ['Um carregador está quente e ligado em uma tomada com vários aparelhos. Qual é a atitude correta?', 'Parar de usar o local e chamar um adulto.', 'Retirar todos os plugues puxando pelos fios.', 'Colocar o carregador no chão para esfriar.', 'Ligar um ventilador na mesma tomada.'],
+    ['Durante uma tempestade, uma pipa fica presa perto de fios elétricos. O que fazer?', 'Abandonar a linha, manter distância e avisar um adulto.', 'Puxar a linha usando luvas.', 'Esperar a chuva terminar e subir no poste.', 'Molhar a linha para soltá-la.'],
+  ],
+  [
+    ['Uma estante alta balança quando uma gaveta é aberta. O que fazer?', 'Não usar o móvel e avisar um adulto para fixá-lo.', 'Abrir todas as gavetas.', 'Apoiar a estante com uma cadeira.', 'Subir rapidamente antes que balance.'],
+    ['Um bebê colocou uma peça pequena na boca. Qual é a atitude correta?', 'Chamar um adulto imediatamente e observar se ele consegue respirar.', 'Colocar o dedo na garganta.', 'Dar água.', 'Sacudir o bebê.'],
+    ['Há brinquedos, fios e um tapete dobrado na passagem. Como prevenir uma queda?', 'Pedir ajuda para organizar tudo e liberar o caminho.', 'Pular por cima.', 'Apagar a luz.', 'Cobrir tudo com uma toalha.'],
+    ['Uma criança abre as gavetas de uma cômoda para usá-las como escada. Qual é o principal risco?', 'O móvel pode tombar sobre ela.', 'As roupas podem cair.', 'As gavetas podem ficar desorganizadas.', 'O objeto desejado pode quebrar.'],
+    ['Há moedas no chão perto de um bebê e um saco plástico sobre a cama. Como agir?', 'Afastar o bebê e pedir que um adulto guarde os dois tipos de objeto.', 'Guardar apenas as moedas.', 'Colocar tudo em uma gaveta baixa.', 'Dar o saco ao bebê enquanto guarda as moedas.'],
+    ['Uma mesa tem quina desprotegida e o tapete abaixo dela está dobrado. Qual prevenção é mais completa?', 'Proteger a quina e fixar corretamente o tapete.', 'Mover a mesa sobre a dobra.', 'Cobrir a mesa com uma toalha longa.', 'Avisar para todos correrem longe da mesa.'],
+  ],
+  [
+    ['Uma criança com boia quer entrar na piscina sem adulto. O que você deve dizer?', 'A boia não substitui a supervisão de um adulto.', 'A boia torna a piscina totalmente segura.', 'Pode entrar se ficar na parte rasa.', 'Pode entrar se souber gritar.'],
+    ['Depois de uma brincadeira, o portão da piscina ficou aberto. O que fazer?', 'Não entrar e chamar um adulto para fechar o acesso.', 'Fechar enquanto corre na borda.', 'Deixar aberto porque ninguém está nadando.', 'Colocar um brinquedo na passagem.'],
+    ['Uma pessoa mergulhou e não voltou à superfície. Qual é sua ação?', 'Chamar um adulto e o socorro sem entrar na água.', 'Pular para procurar sozinho.', 'Esperar mais alguns minutos.', 'Jogar objetos pesados na água.'],
+    ['Uma criança sabe nadar e quer buscar um brinquedo sozinha na piscina. Qual resposta está correta?', 'Saber nadar não substitui a presença e supervisão de um adulto.', 'Ela pode entrar se o brinquedo estiver perto.', 'Ela pode usar uma boia e entrar.', 'Ela pode pedir que outra criança observe.'],
+    ['O chão ao redor da piscina está molhado e o portão ficou aberto. O que fazer?', 'Andar com cuidado, não entrar e chamar um adulto para fechar o acesso.', 'Correr até o portão e fechá-lo.', 'Deixar aberto até o chão secar.', 'Colocar uma boia na entrada.'],
+    ['Por que produtos de limpeza da piscina devem ficar fechados e fora do alcance?', 'Podem causar intoxicação ou ferimentos se forem manipulados.', 'Podem perder a cor ao sol.', 'Podem deixar a piscina fria.', 'Podem atrair insetos apenas.'],
+  ],
+  [
+    ['Ao ligar para o 192, quais informações devem ser dadas com clareza?', 'Local exato, o que aconteceu e quantas pessoas precisam de ajuda.', 'Somente seu primeiro nome.', 'A história completa antes do endereço.', 'A cor da casa apenas.'],
+    ['Você não sabe o número da casa durante uma emergência. O que pode ajudar?', 'Informar pontos de referência e pedir ajuda a um adulto.', 'Inventar um número.', 'Desligar a ligação.', 'Dizer apenas o bairro.'],
+    ['O atendente do socorro faz várias perguntas. O que você deve fazer?', 'Responder com calma e seguir as orientações.', 'Desligar para chamar outra pessoa.', 'Responder apenas sim para tudo.', 'Sair do local sem avisar.'],
+    ['Você já informou o endereço, mas percebe que há outro perigo no local. O que fazer?', 'Contar imediatamente ao atendente e permanecer em segurança.', 'Aproximar-se para confirmar o perigo.', 'Esperar a equipe chegar sem falar.', 'Desligar e fazer uma nova ligação.'],
+    ['Ao pedir socorro, qual descrição ajuda mais?', 'Dizer o que aconteceu, como a pessoa está e se o local é seguro.', 'Contar somente como o acidente começou.', 'Informar apenas o nome da vítima.', 'Dar sua opinião sobre o acidente.'],
+    ['Por que não se deve fazer uma ligação falsa para 192 ou 193?', 'Ela pode ocupar o atendimento necessário para uma emergência real.', 'O telefone pode descarregar.', 'O atendente pode fazer muitas perguntas.', 'A ligação pode ficar sem som.'],
+  ],
+  [
+    ['Um corte continua sangrando após alguns minutos de compressão. O que fazer?', 'Manter a compressão com pano limpo e chamar o socorro.', 'Retirar o pano várias vezes para olhar.', 'Passar pó de café.', 'Lavar continuamente.'],
+    ['Uma queimadura formou bolhas. Qual cuidado é correto?', 'Não estourar as bolhas e procurar orientação de um adulto.', 'Furar para sair o líquido.', 'Passar manteiga.', 'Colocar gelo diretamente.'],
+    ['Após uma queda, o braço parece torto e dói muito. O que fazer?', 'Evitar movimentar e chamar um adulto.', 'Tentar colocá-lo no lugar.', 'Massagear com força.', 'Continuar usando o braço.'],
+    ['Um curativo ficou molhado e o ferimento voltou a sangrar. O que fazer?', 'Avisar um adulto para usar material limpo e avaliar o ferimento.', 'Colocar outro curativo sobre o molhado.', 'Retirar e deixar sem proteção.', 'Passar uma pomada desconhecida.'],
+    ['Uma pessoa bateu a cabeça e depois ficou confusa. Por que precisa de ajuda rápida?', 'Confusão após a batida pode indicar um ferimento importante.', 'Porque ela pode esquecer o caminho.', 'Porque toda batida causa um corte.', 'Porque precisa dormir imediatamente.'],
+    ['Você quer ajudar alguém que está sangrando, mas só encontra um pano sujo. O que fazer?', 'Chamar um adulto e buscar material limpo sem tocar no sangue.', 'Usar o pano sujo para agir rápido.', 'Lavar o pano sobre o ferimento.', 'Pressionar com a própria mão.'],
+  ],
+  [
+    ['Uma pessoa foi picada por um animal desconhecido no jardim. O que fazer?', 'Afastar-se, chamar um adulto e procurar atendimento.', 'Tentar capturar o animal com as mãos.', 'Cortar o local.', 'Amarrar acima da picada.'],
+    ['Por que sapatos guardados devem ser verificados antes do uso?', 'Animais peçonhentos podem estar escondidos neles.', 'Para conferir o tamanho.', 'Para deixar o sapato mais quente.', 'Para retirar os cadarços.'],
+    ['Após uma picada, alguém sugere colocar folhas no local. Como agir?', 'Não usar receitas caseiras e buscar atendimento.', 'Usar muitas folhas.', 'Esfregar terra.', 'Apertar o local.'],
+    ['Você vê um escorpião perto de uma pilha de brinquedos. Qual é a ação mais segura?', 'Afastar as crianças e chamar um adulto sem mexer na pilha.', 'Retirar primeiro os brinquedos.', 'Prender o escorpião com o pé.', 'Cobrir toda a pilha com um pano.'],
+    ['Uma pessoa foi picada, mas o animal desapareceu. É preciso procurar atendimento?', 'Sim, um adulto deve buscar atendimento mesmo sem capturar o animal.', 'Não, porque não é possível identificar o animal.', 'Somente se encontrar o animal.', 'Apenas depois de esperar algumas horas.'],
+    ['Por que manter quintais limpos, sem entulho e com frestas vedadas ajuda?', 'Reduz locais onde animais peçonhentos podem se esconder.', 'Impede que todos os animais entrem.', 'Elimina a necessidade de usar calçados.', 'Torna seguro tocar em qualquer animal.'],
+  ],
+  [
+    ['Durante uma convulsão, a pessoa está perto de uma mesa. O que fazer?', 'Afastar objetos perigosos, proteger a cabeça e chamar ajuda.', 'Segurar braços e pernas.', 'Colocar uma colher na boca.', 'Dar água.'],
+    ['Uma pessoa desmaiada começa a vomitar. Qual é a prioridade da criança?', 'Chamar um adulto e o socorro imediatamente.', 'Dar água.', 'Colocar a pessoa sentada sozinha.', 'Ir embora para buscar comida.'],
+    ['Um adulto sente dor no peito e falta de ar. Como agir?', 'Chamar ajuda e manter a pessoa calma e sem esforço.', 'Mandar caminhar.', 'Dar um remédio qualquer.', 'Pedir para respirar correndo.'],
+    ['Uma pessoa desmaiou após dizer que estava tonta. Qual informação deve ser passada ao socorro?', 'O que aconteceu antes, se ela responde e o local exato.', 'Somente a idade aproximada.', 'A roupa que ela está usando.', 'O tempo que falta para ela acordar.'],
+    ['Durante uma convulsão, alguém quer segurar a pessoa e colocar algo em sua boca. O que você deve dizer?', 'Não faça isso; afaste objetos e chame ajuda.', 'Segure apenas as pernas.', 'Use um objeto macio na boca.', 'Dê água antes de segurá-la.'],
+    ['Uma pessoa engasgada ainda consegue tossir e falar. Qual é a melhor conduta para a criança?', 'Chamar um adulto e incentivar a tosse, observando se piora.', 'Dar água imediatamente.', 'Bater continuamente nas costas.', 'Colocar o dedo na boca.'],
+  ],
+];
+
+const hardRows = [
+  [
+    ['Uma panela de óleo pega fogo e não há adulto no cômodo. Qual sequência é mais segura?', 'Afastar-se, alertar todos e chamar um adulto ou o 193.', 'Jogar água e retirar a panela.', 'Cobrir com pano molhado e carregar.', 'Abrir portas e janelas e continuar perto.'],
+    ['Você sente cheiro de gás e ouve um vazamento. O que não deve fazer?', 'Acionar interruptores ou aparelhos elétricos.', 'Sair do ambiente.', 'Avisar um adulto do lado de fora.', 'Manter outras pessoas afastadas.'],
+    ['Uma bebida quente cai sobre a roupa de alguém. Qual ação é mais adequada?', 'Chamar um adulto e resfriar a área com água corrente, sem arrancar tecido grudado.', 'Retirar à força qualquer tecido grudado.', 'Aplicar gelo e pasta de dente.', 'Cobrir imediatamente com algodão.'],
+    ['Há fogo em uma panela e fumaça bloqueando parte da saída. Qual decisão protege melhor a criança?', 'Usar uma saída segura, alertar outras pessoas e chamar o 193 do lado de fora.', 'Passar pela fumaça para desligar o fogão.', 'Abrir a panela para verificar o fogo.', 'Permanecer no cômodo esperando um adulto.'],
+    ['Você encontra produto de limpeza em garrafa de refrigerante ao lado de alimentos. Qual é o risco combinado?', 'Alguém pode confundir, ingerir e sofrer intoxicação.', 'O produto pode perder a eficiência.', 'Os alimentos podem ficar com cheiro apenas.', 'A garrafa pode ocupar espaço.'],
+    ['Uma faca caiu ao lado de vidro quebrado e líquido quente. Qual deve ser sua primeira atitude?', 'Não se aproximar e impedir que outros entrem até chamar um adulto.', 'Retirar a faca pelo cabo.', 'Secar primeiro o líquido.', 'Empurrar os cacos com o pé.'],
+  ],
+  [
+    ['Você encontra uma pessoa caída no banheiro, perto de um aparelho elétrico ligado. Qual é a prioridade?', 'Não entrar na área molhada e chamar um adulto para cortar a energia.', 'Puxar a pessoa pelos braços.', 'Desligar o aparelho entrando na água.', 'Jogar uma toalha sobre o aparelho.'],
+    ['Um frasco de produto químico caiu nos olhos. O que fazer?', 'Chamar um adulto e lavar com água corrente sem esfregar.', 'Manter os olhos fechados.', 'Aplicar colírio por conta própria.', 'Esfregar com uma toalha.'],
+    ['Alguém misturou produtos de limpeza e surgiu um cheiro forte. Como agir?', 'Sair para um local ventilado e chamar um adulto ou socorro.', 'Chegar perto para identificar.', 'Ligar um aparelho para ventilar.', 'Adicionar outro produto.'],
+    ['Uma pessoa caiu no box, bateu a cabeça e diz que está bem, mas parece confusa. O que fazer?', 'Pedir que não se mova e chamar um adulto para atendimento.', 'Ajudá-la a levantar imediatamente.', 'Dar um banho frio.', 'Deixá-la sozinha para descansar.'],
+    ['Remédios diferentes foram encontrados fora das embalagens. Qual atitude evita dois riscos?', 'Não tocar nem tentar identificá-los e chamar um adulto.', 'Separá-los pela cor.', 'Cheirar cada um.', 'Guardá-los juntos em outro pote.'],
+    ['O banheiro está escuro, molhado e há objetos no chão. Qual sequência é mais segura?', 'Não entrar e pedir que um adulto ilumine, seque e organize o local.', 'Entrar devagar procurando o interruptor.', 'Retirar os objetos antes de acender a luz.', 'Usar o celular enquanto atravessa.'],
+  ],
+  [
+    ['Um fio energizado caiu no chão perto de uma pessoa. Qual distância é segura?', 'Manter-se bem afastado e impedir aproximações até chegar ajuda.', 'Chegar até um metro para observar.', 'Afastar o fio com qualquer madeira.', 'Pisar ao lado do fio com calçado seco.'],
+    ['Após um choque, a energia foi desligada, mas a pessoa não responde. O que fazer?', 'Chamar o 192 ou 193 e seguir as orientações do atendente.', 'Dar água para acordar.', 'Levantar a pessoa.', 'Religar a energia para testar.'],
+    ['Por que um benjamim com muitos aparelhos é perigoso?', 'Pode sobrecarregar, aquecer e provocar incêndio.', 'Pode gastar a bateria dos aparelhos.', 'Pode deixar a luz mais fraca apenas.', 'Pode mudar a voltagem da casa sempre.'],
+    ['Há água perto de uma tomada com faíscas. Um adulto ainda não chegou. Qual é a conduta correta?', 'Isolar a área, manter distância e chamar ajuda.', 'Secar a água começando pelo lado oposto.', 'Desligar os aparelhos um por um.', 'Cobrir a tomada com pano seco.'],
+    ['Uma pessoa sofreu choque e caiu após a energia ser desligada. Por que não deve ser levantada?', 'Ela pode ter sofrido lesões e precisa ser avaliada pelo socorro.', 'Porque o chão pode ficar marcado.', 'Porque ela precisa beber água antes.', 'Porque a energia sempre volta sozinha.'],
+    ['Um fio danificado está sob um tapete, sem faíscas visíveis. Por que continua perigoso?', 'O dano pode causar choque, aquecimento ou incêndio sem aviso.', 'O tapete pode ficar amassado.', 'O fio pode deixar de alcançar a tomada.', 'A televisão pode perder o sinal.'],
+  ],
+  [
+    ['Uma TV está sobre um móvel instável e uma criança tenta escalá-lo. Qual prevenção é mais completa?', 'Afastar a criança e pedir a um adulto que fixe móvel e TV corretamente.', 'Fechar uma gaveta apenas.', 'Colocar objetos pesados no topo.', 'Segurar o móvel durante a escalada.'],
+    ['Uma criança pode estar engasgada com uma peça pequena e não consegue falar. O que fazer?', 'Chamar imediatamente um adulto e o socorro.', 'Oferecer água.', 'Tentar retirar sem enxergar o objeto.', 'Mandar deitar e esperar.'],
+    ['Em uma casa com criança pequena, qual conjunto reduz mais riscos?', 'Móveis fixados, peças pequenas guardadas e passagens livres.', 'Gavetas abertas e tapetes soltos.', 'Objetos pesados no alto.', 'Fios cobertos por tapetes.'],
+    ['Uma estante não está fixada e há objetos pesados no alto. Qual correção é mais segura?', 'Um adulto deve fixá-la e mover os objetos pesados para baixo.', 'Encostá-la mais perto da parede.', 'Fechar todas as gavetas.', 'Colocar uma cadeira na frente.'],
+    ['Por que cordões de cortina e sacos plásticos exigem cuidados diferentes, mas urgentes?', 'Ambos podem impedir a respiração de uma criança.', 'Ambos podem provocar choque elétrico.', 'Ambos quebram móveis facilmente.', 'Ambos causam intoxicação ao toque.'],
+    ['Uma criança tropeça em um brinquedo e bate a cabeça na quina da mesa. Quais prevenções faltaram?', 'Passagem livre e proteção adequada na quina.', 'Cortina curta e luz acesa.', 'Móvel pesado e tapete colorido.', 'Janela fechada e porta aberta.'],
+  ],
+  [
+    ['Você vê uma pessoa imóvel na piscina. O que uma criança deve fazer primeiro?', 'Chamar ajuda e lançar um objeto flutuante sem entrar na água.', 'Mergulhar para buscar.', 'Correr pela borda.', 'Esperar a pessoa se mover.'],
+    ['Após retirar alguém da água, a pessoa não responde. O que fazer?', 'Ligar para o socorro e seguir as instruções, sem oferecer líquidos.', 'Dar água.', 'Fazer a pessoa caminhar.', 'Deixá-la sozinha para descansar.'],
+    ['Qual combinação oferece maior proteção na piscina?', 'Barreira fechada, supervisão ativa e acesso controlado.', 'Boia de braço e brinquedos.', 'Avisos escritos e piscina rasa.', 'Saber nadar e estar acompanhado por outra criança.'],
+    ['Uma criança desaparece perto de uma área com piscina. Qual local deve ser verificado primeiro por um adulto?', 'A piscina e outras áreas com água.', 'O quarto de brinquedos.', 'A cozinha.', 'A entrada da rua apenas.'],
+    ['Por que supervisão ativa significa mais do que um adulto estar próximo?', 'O adulto precisa observar continuamente e estar pronto para agir.', 'O adulto precisa apenas ouvir a brincadeira.', 'O adulto pode observar de outro cômodo.', 'O adulto precisa conferir a cada dez minutos.'],
+    ['Uma pessoa foi retirada da água, responde, mas tosse e tem dificuldade para respirar. O que fazer?', 'Chamar atendimento e mantê-la acompanhada, sem oferecer comida ou bebida.', 'Mandá-la caminhar para aquecer.', 'Deixá-la dormir.', 'Dar água aos poucos.'],
+  ],
+  [
+    ['O atendente do 192 pede que você permaneça na linha. O que fazer?', 'Continuar na linha e seguir as instruções até ser liberado.', 'Desligar após informar o endereço.', 'Telefonar ao mesmo tempo para amigos.', 'Mudar a pessoa de lugar sem avisar.'],
+    ['Há fumaça e uma pessoa ferida dentro de um cômodo. Qual é o papel seguro da criança?', 'Não entrar, sair para local seguro e chamar o 193.', 'Entrar rastejando para resgatar.', 'Abrir a porta e permanecer perto.', 'Buscar objetos antes de sair.'],
+    ['Ao informar uma emergência, por que dizer primeiro o endereço é importante?', 'Permite enviar ajuda mesmo se a ligação cair.', 'Reduz o valor da ligação.', 'Evita perguntas do atendente.', 'Identifica automaticamente a vítima.'],
+    ['Você está em local seguro, mas a vítima está perto de um perigo. O atendente manda não se aproximar. O que fazer?', 'Seguir a orientação e esperar a equipe treinada.', 'Aproximar-se rapidamente.', 'Pedir que outra criança vá.', 'Mover o perigo sozinho.'],
+    ['Duas pessoas ligam para serviços diferentes e passam informações contraditórias. Como evitar isso?', 'Um responsável deve centralizar informações claras e verdadeiras.', 'Todos devem continuar ligando.', 'Cada pessoa deve inventar um ponto de referência.', 'É melhor desligar todas as chamadas.'],
+    ['Qual relato é mais útil ao 192?', 'Pessoa inconsciente, endereço completo, respiração observada e riscos no local.', 'Uma pessoa passou mal; venham rápido.', 'Houve um problema perto de uma casa azul.', 'Não sei o que ocorreu e estou saindo.'],
+  ],
+  [
+    ['Um objeto está preso em um ferimento com sangramento. Como agir?', 'Não retirar o objeto, chamar ajuda e evitar movimentá-lo.', 'Retirar rapidamente e comprimir.', 'Empurrá-lo para estabilizar.', 'Lavar por baixo do objeto.'],
+    ['Após uma batida na cabeça, a pessoa está sonolenta e vomitou. O que fazer?', 'Chamar atendimento imediatamente e evitar movimentá-la.', 'Deixá-la dormir sem contar.', 'Dar comida.', 'Mandar caminhar.'],
+    ['Uma queimadura extensa atingiu rosto e mãos. Qual é a prioridade?', 'Chamar o socorro e resfriar com água corrente se isso for seguro.', 'Aplicar pomada.', 'Estourar bolhas.', 'Cobrir com algodão.'],
+    ['Um corte profundo atravessa a roupa e o sangue continua saindo. Qual sequência é adequada?', 'Chamar ajuda, comprimir com material limpo e não retirar o primeiro pano.', 'Retirar o pano sempre que molhar.', 'Lavar até parar de sangrar.', 'Aplicar produto caseiro e cobrir.'],
+    ['Após uma queda forte, a pessoa sente dor no pescoço e formigamento. O que fazer?', 'Pedir que fique imóvel e chamar o socorro.', 'Ajudá-la a sentar.', 'Massagear o pescoço.', 'Puxá-la pelos braços.'],
+    ['Uma pessoa tem queimadura e corte ao mesmo tempo. Qual é o papel da criança?', 'Garantir sua própria segurança e chamar um adulto ou o socorro.', 'Escolher qual ferimento tratar sozinha.', 'Aplicar gelo nos dois locais.', 'Dar água antes de pedir ajuda.'],
+  ],
+  [
+    ['Após picada de cobra, qual conjunto de atitudes está correto?', 'Manter a pessoa calma, não fazer torniquete e buscar atendimento.', 'Cortar, sugar e amarrar o local.', 'Fazer a pessoa correr.', 'Aplicar folhas e esperar.'],
+    ['Uma pessoa picada por abelha apresenta falta de ar e inchaço no rosto. O que fazer?', 'Chamar imediatamente o 192 ou 193.', 'Esperar o inchaço diminuir.', 'Dar comida.', 'Mandar caminhar.'],
+    ['Por que não se deve tentar capturar um animal peçonhento?', 'Isso cria risco de uma nova picada; uma foto distante por adulto pode ajudar.', 'Porque o animal perde a cor.', 'Porque o recipiente pode quebrar apenas.', 'Porque o hospital não precisa de informação.'],
+    ['Uma pessoa picada começa a vomitar e ficar sonolenta. Qual é a prioridade?', 'Buscar atendimento imediatamente e mantê-la acompanhada.', 'Esperar em casa para identificar o animal.', 'Fazer a pessoa caminhar.', 'Oferecer um remédio qualquer.'],
+    ['Há entulho, frestas abertas e sapatos no chão de um quintal. Qual prevenção é mais completa?', 'Remover o entulho com proteção, vedar frestas e verificar os sapatos.', 'Sacudir apenas os sapatos.', 'Aplicar perfume no local.', 'Deixar uma luz acesa.'],
+    ['Após uma picada, por que correr ou apertar o local não é recomendado?', 'Pode piorar a situação; a pessoa deve ficar calma e buscar atendimento.', 'Pode apagar a marca da picada.', 'Pode dificultar encontrar o animal.', 'Pode sujar o ferimento.'],
+  ],
+  [
+    ['Uma pessoa não responde e parece não respirar. Qual é a atitude correta da criança?', 'Chamar um adulto, ligar 192 e seguir exatamente as orientações.', 'Dar água.', 'Sacudir com força.', 'Colocar um objeto na boca.'],
+    ['Durante uma convulsão que dura vários minutos, o que deve ser informado ao socorro?', 'Tempo da crise, local e condição da pessoa.', 'Somente o nome da pessoa.', 'O que ela comeu no dia anterior apenas.', 'A roupa que está usando apenas.'],
+    ['Uma pessoa apresenta fala enrolada, sorriso torto e fraqueza em um braço. O que fazer?', 'Ligar imediatamente para o 192 e anotar quando os sinais começaram.', 'Esperar dormir.', 'Dar comida e água.', 'Pedir que faça exercícios.'],
+    ['Uma pessoa inconsciente respira, mas há risco no local. Qual princípio vem primeiro?', 'Não se colocar em perigo e chamar o socorro.', 'Mover a pessoa imediatamente.', 'Dar água antes de sair.', 'Permanecer ao lado sem pedir ajuda.'],
+    ['Durante uma emergência, a vítima melhora antes da chegada do socorro. O que fazer?', 'Informar a mudança ao atendente e continuar seguindo as orientações.', 'Cancelar tudo sem explicar.', 'Dar comida para testar.', 'Pedir que a pessoa volte às atividades.'],
+    ['Uma pessoa teve convulsão, parou de tremer e continua confusa. Qual cuidado permanece necessário?', 'Acompanhá-la, manter o local seguro e aguardar ajuda.', 'Dar água imediatamente.', 'Mandá-la levantar.', 'Fazer perguntas rapidamente.'],
+  ],
+];
+
+export const mediumQuestions = mediumRows.map((rows, index) => makeQuestions(rows, `medium-${index}`));
+export const hardQuestions = hardRows.map((rows, index) => makeQuestions(rows, `hard-${index}`));
