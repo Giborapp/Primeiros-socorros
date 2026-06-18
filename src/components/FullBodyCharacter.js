@@ -182,7 +182,7 @@ export default function FullBodyCharacter({
   const hair = HAIR_COLORS.find(item => item.id === opts.hairColor)?.color || '#69402F';
   const selectedOutfit = OUTFIT_COLORS.find(item => item.id === opts.outfitColor)?.color || '#397BD1';
   const outfit = OUTFIT_STYLES.find(item => item.id === opts.outfitStyle) || OUTFIT_STYLES[0];
-  const clothesColor = isFirefighter ? '#D8403A' : selectedOutfit;
+  const clothesColor = isFirefighter ? '#273849' : selectedOutfit;
   const genderFaces = FACE_MAP[gender];
   const face = EXPRESSION_MAP[expression] || genderFaces[opts.faceStyle] || genderFaces.alegre;
   const legacyAccessory = opts.accessory && opts.accessory !== 'nenhum' ? opts.accessory : null;
@@ -190,7 +190,7 @@ export default function FullBodyCharacter({
   const headwearValue = opts.headwear !== 'nenhum' ? opts.headwear : legacyAccessory;
   const headwear = HEADWEAR_MAP[headwearValue];
   const top = isFirefighter
-    ? 'hat'
+    ? HAIR_MAP[opts.hairStyle]?.[gender] || HAIR_MAP.curto[gender]
     : headwear || HAIR_MAP[opts.hairStyle]?.[gender] || HAIR_MAP.curto[gender];
   const accessory = ACCESSORY_MAP[eyewearValue];
 
@@ -206,11 +206,11 @@ export default function FullBodyCharacter({
       facialHairProbability: 0,
       top: [top],
       topProbability: 100,
-      hatColor: [isFirefighter ? 'd8403a' : hex(selectedOutfit)],
+      hatColor: [hex(selectedOutfit)],
       accessories: accessory ? [accessory] : ['round'],
       accessoriesProbability: accessory ? 100 : 0,
       accessoriesColor: ['44355b'],
-      clothing: [outfit.clothing],
+      clothing: [isFirefighter ? 'overall' : outfit.clothing],
       clothesColor: [hex(clothesColor)],
       clothingGraphic: [outfit.graphic || 'bear'],
       eyes: [face.eyes],
@@ -254,6 +254,61 @@ export default function FullBodyCharacter({
         height={bust ? size * 1.04 : size * 1.18}
         style={{ display: 'block', objectFit: 'contain', objectPosition: 'center bottom' }}
       />
+
+      {isFirefighter && (
+        <div aria-hidden="true" style={{ position:'absolute', inset:0, pointerEvents:'none' }}>
+          {/* Capacete de combate a incêndio */}
+          <div style={{
+            position:'absolute', zIndex:3,
+            top:bust ? '1%' : '3%', left:'25%', width:'50%', height:'25%',
+            background:'linear-gradient(145deg,#ff5a4f 0%,#c92525 68%,#901818 100%)',
+            borderRadius:'52% 52% 24% 24% / 62% 62% 30% 30%',
+            border:`${Math.max(2, size * 0.014)}px solid #721414`,
+            boxShadow:`inset 0 ${size * 0.025}px ${size * 0.04}px rgba(255,255,255,.3), 0 ${size * 0.018}px ${size * 0.035}px rgba(0,0,0,.35)`,
+          }}>
+            <div style={{
+              position:'absolute', top:'18%', left:'36%', width:'28%', height:'42%',
+              display:'grid', placeItems:'center',
+              color:'#5b160d', background:'linear-gradient(#ffe875,#d9a51e)',
+              clipPath:'polygon(50% 0,100% 25%,84% 100%,16% 100%,0 25%)',
+              fontSize:size * .065, lineHeight:1, fontWeight:1000,
+            }}>193</div>
+            <div style={{
+              position:'absolute', left:'-12%', right:'-12%', bottom:'-11%', height:'25%',
+              borderRadius:'50%', background:'linear-gradient(#ed4438,#a91e1e)',
+              borderBottom:`${Math.max(2, size * .014)}px solid #671010`,
+              boxShadow:`0 ${size * .015}px ${size * .02}px rgba(0,0,0,.3)`,
+            }} />
+          </div>
+
+          {/* Jaqueta estrutural com faixas refletivas */}
+          <div style={{
+            position:'absolute', zIndex:2, overflow:'hidden',
+            left:'20%', width:'60%', top:bust ? '67%' : '69%', height:bust ? '34%' : '31%',
+            background:'linear-gradient(90deg,#172631,#344b5d 48%,#1d303e 52%,#111f29)',
+            borderRadius:'17% 17% 8% 8%',
+            border:`${Math.max(1, size * .009)}px solid #0b151c`,
+            boxShadow:'inset 0 3px 5px rgba(255,255,255,.12)',
+          }}>
+            <div style={{
+              position:'absolute', left:0, right:0, top:'39%', height:'13%',
+              background:'linear-gradient(#d9ff48 0 34%,#d8e2df 34% 66%,#d9ff48 66%)',
+              boxShadow:'0 0 6px rgba(218,255,72,.55)',
+            }} />
+            <div style={{
+              position:'absolute', left:'48%', top:0, bottom:0, width:'4%',
+              background:'#0b151c', borderLeft:'1px solid #5a7180',
+            }} />
+            <div style={{
+              position:'absolute', left:'9%', top:'8%', padding:'1% 4%', borderRadius:3,
+              background:'#d3332d', color:'#fff', fontSize:size * .042,
+              fontWeight:1000, letterSpacing:.4,
+            }}>BOMBEIRO</div>
+            <div style={{ position:'absolute', left:'9%', bottom:'10%', width:'25%', height:'18%', border:'1px solid #607786', borderRadius:3 }} />
+            <div style={{ position:'absolute', right:'9%', bottom:'10%', width:'25%', height:'18%', border:'1px solid #607786', borderRadius:3 }} />
+          </div>
+        </div>
+      )}
 
       {expression === 'thinking' && (
         <motion.span
